@@ -1,7 +1,6 @@
 require 'optparse'
 require 'backlog_kit'
 require 'uri'
-require 'pp'
 
 module Backlogcp
   class CLI

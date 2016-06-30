@@ -1,4 +1,4 @@
-# Backlogcp
+# backlogcp
 
 Backlog file copy command like `scp`.
 
