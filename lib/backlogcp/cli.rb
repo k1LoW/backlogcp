@@ -1,6 +1,7 @@
 require 'optparse'
 require 'backlog_kit'
 require 'uri'
+require 'pp'
 
 module Backlogcp
   class CLI
@@ -47,22 +48,8 @@ module Backlogcp
       else
         usage '<from> option should be backlog.jp URI.'
       end
-      client = BacklogKit::Client.new
-      issues = client.get_issues({
-                                   attachment: true,
-                                   count: 100
-                                 }).body
-      selected = nil
-      attachment = nil
-      issues.each do |issue|
-        issue.attachments.each do |a|
-          if a.id.to_s == attachment_id
-            attachment = a
-            selected = issue
-          end
-        end
-      end
-      usage 'file not found' unless selected
+
+      selected, attachment = get_issue_and_attachment(attachment_id)      
 
       filename = attachment.name
       local = File.expand_path(to)
@@ -72,6 +59,7 @@ module Backlogcp
                        local
                      end
       puts to_file_path
+      client = BacklogKit::Client.new
       res = client.download_issue_attachment(selected.issueKey, attachment.id)
       File.binwrite(to_file_path, res.body.content)
     end
@@ -101,6 +89,36 @@ module Backlogcp
       usage 'number of arguments is less than 2' if args.size < 2
 
       [opts, args]
+    end
+
+    def get_issue_and_attachment(attachment_id)
+      client = BacklogKit::Client.new
+
+      selected = nil
+      attachment = nil
+      limit = 100
+      offset = 0
+      loop do
+        issues = client.get_issues({
+                                     attachment: true,
+                                     count: limit,
+                                     offset: offset * limit
+                                   }).body
+        issues.each do |issue|
+          issue.attachments.each do |a|
+            if a.id.to_s == attachment_id
+              attachment = a
+              selected = issue
+            end
+          end
+        end
+
+        (!selected && issues.length == limit) || break
+        offset += 1
+      end
+      usage 'file not found' unless selected
+
+      [selected, attachment]
     end
   end
 end
