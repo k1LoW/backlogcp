@@ -1,4 +1,4 @@
-# backlogcp
+# backlogcp [![Gem](https://img.shields.io/gem/v/backlogcp.svg)](https://rubygems.org/gems/backlogcp)
 
 Backlog file copy command like `scp`.
 
@@ -7,7 +7,7 @@ Backlog file copy command like `scp`.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'backlogcp', github: "k1LoW/backlogcp"
+gem 'backlogcp'
 ```
 
 And then execute:
@@ -16,8 +16,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install specific_install
-    $ gem specific_install https://github.com/k1LoW/backlogcp.git
+    $ gem install backlogcp
 
 ## Usage
 
