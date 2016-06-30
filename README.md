@@ -1,5 +1,7 @@
 # Backlogcp
 
+Backlog file copy command like `scp`.
+
 ## Installation
 
 Add this line to your application's Gemfile:

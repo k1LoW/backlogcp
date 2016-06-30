@@ -9,8 +9,8 @@ Gem::Specification.new do |spec|
   spec.authors       = ['k1LoW']
   spec.email         = ['k1lowxb@gmail.com']
 
-  spec.summary       = 'Backlog file copy.'
-  spec.description   = 'Backlog file copy command.'
+  spec.summary       = 'Backlog file copy command like scp.'
+  spec.description   = 'Backlog file copy command like scp.'
   spec.homepage      = 'https://github.com/k1LoW/backlogcp'
   spec.license       = 'MIT'
 
