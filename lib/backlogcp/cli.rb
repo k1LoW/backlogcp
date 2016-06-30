@@ -1,7 +1,6 @@
 require 'optparse'
 require 'backlog_kit'
 require 'uri'
-require 'pp'
 
 module Backlogcp
   class CLI
@@ -49,7 +48,7 @@ module Backlogcp
         usage '<from> option should be backlog.jp URI.'
       end
 
-      selected, attachment = get_issue_and_attachment(attachment_id)      
+      selected, attachment = get_issue_and_attachment(attachment_id)
 
       filename = attachment.name
       local = File.expand_path(to)
