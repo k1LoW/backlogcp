@@ -40,6 +40,11 @@ $ export BACKLOG_SPACE_ID=xxxxxxxxx BACKLOG_API_KEY=XXXXXxxxXXXXxxXXXXXxXXXXXXX
 $ backlogcp https://xxxxxxxxx.backlog.jp/file/XXXXX/path/to/file.png ./
 ```
 
+## Support file type
+
+- Shared file
+- Attachment file on issue
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.
