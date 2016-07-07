@@ -12,7 +12,7 @@ module Backlogcp
     private
 
     def dl(from, to)
-      if %r(^.+backlog.jp/file/) =~ URI.unescape(from)
+      if %r(^https://(?<space_id>.+)\.backlog.jp/file/) =~ URI.unescape(from)
         dl_from_shared_file(from, to)
       else
         dl_from_issue_attachment(from, to)
@@ -21,7 +21,7 @@ module Backlogcp
 
     # https://[space_id].backlog.jp/file/[project_key]/[dir][filename]
     def dl_from_shared_file(from, to)
-      unless %r(^.+backlog.jp/file/(?<project_key>[^/]+)(?<dir>/?.*/)(?<filename>[^/]+)$) =~ URI.unescape(from)
+      unless %r(^https://(?<space_id>.+)\.backlog.jp/file/(?<project_key>[^/]+)(?<dir>/?.*/)(?<filename>[^/]+)$) =~ URI.unescape(from)
         usage '<from> option should be backlog.jp URI.'
       end
       local = File.expand_path(to)
@@ -30,7 +30,7 @@ module Backlogcp
                      else
                        local
                      end
-      client = BacklogKit::Client.new
+      client = BacklogKit::Client.new(space_id: space_id)
       files = client.get_shared_files(project_key, dir).body
       selected = files.find do |res|
         res.name == filename
@@ -42,13 +42,13 @@ module Backlogcp
 
     # https://[space_id].backlog.jp/ViewAttachment.action?attachmentId=[attachment_id]
     def dl_from_issue_attachment(from, to)
-      if %r(^.+backlog.jp/.+attachmentId=(?<attachment_id>[^/]+)$) =~ URI.unescape(from)
-      elsif %r(^.+backlog.jp/downloadAttachment/(?<attachment_id>[^/]+)) =~ URI.unescape(from)
+      if %r(^https://(?<space_id>.+)\.backlog.jp/.+attachmentId=(?<attachment_id>[^/]+)$) =~ URI.unescape(from)
+      elsif %r(^https://(?<space_id>.+)\.backlog.jp/downloadAttachment/(?<attachment_id>[^/]+)) =~ URI.unescape(from)
       else
         usage '<from> option should be backlog.jp URI.'
       end
 
-      selected, attachment = get_issue_and_attachment(attachment_id)
+      selected, attachment = get_issue_and_attachment(space_id, attachment_id)
 
       filename = attachment.name
       local = File.expand_path(to)
@@ -58,7 +58,7 @@ module Backlogcp
                        local
                      end
       puts to_file_path
-      client = BacklogKit::Client.new
+      client = BacklogKit::Client.new(space_id: space_id)
       res = client.download_issue_attachment(selected.issueKey, attachment.id)
       File.binwrite(to_file_path, res.body.content)
     end
@@ -90,8 +90,8 @@ module Backlogcp
       [opts, args]
     end
 
-    def get_issue_and_attachment(attachment_id)
-      client = BacklogKit::Client.new
+    def get_issue_and_attachment(space_id, attachment_id)
+      client = BacklogKit::Client.new(space_id: space_id)
 
       selected = nil
       attachment = nil

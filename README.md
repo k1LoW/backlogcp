@@ -35,7 +35,7 @@ Example:
 Use `backlogcp` command like `scp`.
 
 ```sh
-$ export BACKLOG_SPACE_ID=xxxxxxxxx BACKLOG_API_KEY=XXXXXxxxXXXXxxXXXXXxXXXXXXX
+$ export BACKLOG_API_KEY=XXXXXxxxXXXXxxXXXXXxXXXXXXX
 $ backlogcp https://xxxxxxxxx.backlog.jp/file/XXXXX/path/to/file.png ./
 ```
 
